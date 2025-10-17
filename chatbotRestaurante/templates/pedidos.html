@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos - Restaurate IA</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+   <header>
+        <h1>📋Pedidos</h1>
+        <p>Administra los pedidos del restaurante</p>
+        <a href="index.html">⬅️ Volver al menú </a>
+   </header>
+   <main class="pedidos-container">
+        {% if pedidos %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pedido</th>
+                        <th>Dirección</th>
+                        <th>Pago</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in pedidos%}
+                    <tr>
+                        <td>
+                        {% for item in p['pedido'] %}
+                            {{item ['cantidad'] }} {{item ['producto']}} <br>
+                        {%endfor%}
+                        </td>
+                        <td> {{p ['direccion'] }}</td>
+                        <td> {{p ['pago'] }}</td>
+                        <td> {{p ['estado'] }}</td>
+                        <td>
+                            <form action="{{url_for('actualizar_estado')}}" 
+                            method="POST" style="display: inline;">
+                                <input type="hidden" name="index" value="{{loop.index0}}">
+                                <select name="estado">
+                                    <option value="pendiente" {%if p['estado'] == 'pendiente' %} selected {%endif%}> Pendiente</option>
+                                    <option value="entregado" {%if p['estado'] == 'entregado' %} selected {%endif%}> Etregado</option>
+                                    <option value="cancelado" {%if p['estado'] == 'cancelado' %} selected {%endif%}> Cancelado</option>
+                                </select>
+                                <button type="submit">Actualizar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table> 
+        {%else%}
+            <p>No hay pedidos aún</p>
+        {%endif%}
+   </main>
+</body>
+</html>
